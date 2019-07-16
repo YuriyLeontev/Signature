@@ -2,6 +2,4 @@
 
 make -j $(nproc --all)
 
-./Signature ./test.bin ./out.sig 10
-
-
+./Signature ./file.bin ./out.sig 50

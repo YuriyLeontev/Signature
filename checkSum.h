@@ -18,12 +18,11 @@
 #ifndef CHECK_SUM_H
 #define CHECK_SUM_H
 
-#include <iostream>
-
+template<class T>
 class CheckSum {
 public:
     CheckSum() = default;
-    virtual ~CheckSum();
+    virtual ~CheckSum() = default;
 
     CheckSum(const CheckSum&) = delete;
     CheckSum(const CheckSum&&) = delete;
@@ -31,9 +30,7 @@ public:
     CheckSum& operator=(CheckSum&&) = delete;
     CheckSum& operator=(CheckSum&) = delete;
 
-    virtual int calc(unsigned char *data, size_t) const = 0;
+    virtual T calc(const unsigned char *data, const size_t) const = 0;
 };
-
-
 
 #endif /* CHECK_SUM_H */

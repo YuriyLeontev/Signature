@@ -18,22 +18,24 @@
 #ifndef CRC_32_HASH_H
 #define CRC_32_HASH_H
 
+#include <iostream>
 #include "checkSum.h"
 
-typedef __INT32_TYPE__  int32;
+typedef __UINT32_TYPE__  uint32;
 
-class Crc32Hash: public CheckSum {
+template<class T>
+class Crc32Hash: public CheckSum<T> {
 public:   
     Crc32Hash() = default;
-    ~Crc32Hash();
+    ~Crc32Hash() = default;
 
     Crc32Hash(const Crc32Hash&) = delete;
     Crc32Hash(const Crc32Hash&&) = delete;
 
     Crc32Hash& operator=(Crc32Hash&&) = delete;
     Crc32Hash& operator=(Crc32Hash&) = delete;
-
-    virtual int calc(unsigned char *pData, size_t uSize) const  override final;   
+      
+    virtual T calc(const unsigned char *pData,const size_t uSize) const  override final;   
 
 private:
     static const unsigned long Crc32Tab[];

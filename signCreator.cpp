@@ -20,28 +20,47 @@
 
 #include "pcout.h"
 
-SignCreator::SignCreator(uint szBlock): sizeBlock(szBlock){}
-
-SignCreator::~SignCreator(){
-
+SignCreator::SignCreator(std::shared_ptr<mapped_region> _region,uint szBlock):
+region(_region), 
+sizeBlock(szBlock),
+checkSum(new Crc32Hash<uint32>()),
+eptr(nullptr)
+{
+   
 }
 
-void SignCreator::run(std::shared_ptr<mapped_region>  &region){
-    //cout << "region use"<< region.use_count()<<endl;
+SignCreator::~SignCreator(){
+   cout << "~SignCreator"<< endl;
+}
 
-    void * addr       = region.get()->get_address();
-    std::size_t size  = region.get()->get_size(); 
+void SignCreator::run(){
+   try{
+      sig.clear();
+      std::size_t size  = region.get()->get_size(); 
+      size_t countBlock = size / sizeBlock;    
 
- //   pcout{} << "region size "<< size<<endl;
+      const unsigned char *mem = static_cast<unsigned char*>(region.get()->get_address());
+      
+      if (!countBlock){
+         sig.emplace_back(checkSum.get()->calc(mem, size%sizeBlock));       
+      }
+      else{
+         while (countBlock--){
+            sig.emplace_back(checkSum.get()->calc(mem, sizeBlock));   
+            mem+=sizeBlock;
+         }
+         if (size%sizeBlock)
+            sig.emplace_back(checkSum.get()->calc(mem, size%sizeBlock));       
+      }
+   }catch(...){
+      eptr = std::current_exception();
+   }
+}
 
-    const char *mem = static_cast<char*>(addr);
+vector<uint32> & SignCreator::getResult(){
+   return sig;
+}
 
-    vector<char> vec;
-    for(std::size_t i = 0; i < size; i++){
-        vec.emplace_back(mem[i]);;
-    }      
-
-    std::ostream_iterator<char> out_it (std::cout,", ");
-    std::copy(vec.begin(),vec.end(),out_it  );  
-    cout << endl;  
+std::exception_ptr & SignCreator::getError(){
+   return eptr;
 }
