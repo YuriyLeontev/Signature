@@ -19,6 +19,7 @@
 #define CRC_32_HASH_H
 
 #include <iostream>
+
 #include "checkSum.h"
 
 typedef __UINT32_TYPE__  uint32;

@@ -2,4 +2,5 @@
 
 make -j $(nproc --all)
 
-./Signature ./file.bin ./out.sig 50
+# src dst size (Mb)
+./Signature ./test.bin ./test.sig 50

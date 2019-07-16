@@ -45,9 +45,9 @@ void Director::start(const string src,const string dst,const uint szBlock){
            И создание объекта SignCreator для каждой части файла
         */
 
-        /* countBlock/proces блоков */
+        /* countBlock/process блоков */
         int count1 = process-countBlock%process;
-        /* countBlock/proces + 1 блоков */
+        /* countBlock/process + 1 блоков */
         int count2 = countBlock%process;
 
         if (countBlock < process){
@@ -135,9 +135,12 @@ void Director::run(){
 void Director::save(){
     try{
         std::ofstream dstFile(dstPath);
+        dstFile.exceptions(ios::failbit|ios::badbit);
+
         std::ostream_iterator<uint32> out_it (dstFile);     
         for (auto &it: sigs)
             std::copy(it->getResult().begin(),it->getResult().end(),out_it );          
+        cout <<"Success" << endl;
     }catch(exception &e){
         std::cout << e.what() << std::endl;
         return;
