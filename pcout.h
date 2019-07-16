@@ -16,11 +16,8 @@
  \date 2018.07.15
 */
 
-
-
 #ifndef P_COUT_H
 #define P_COUT_H
-
 
 #include <iostream>
 #include <mutex>

@@ -23,14 +23,13 @@
 SignCreator::SignCreator(std::shared_ptr<mapped_region> _region,uint szBlock):
 region(_region), 
 sizeBlock(szBlock),
-checkSum(new Crc32Hash<uint32>()),
-eptr(nullptr)
-{
+checkSum(make_unique<Crc32Hash<uint32>>()),
+eptr(nullptr){
    
 }
 
 SignCreator::~SignCreator(){
-   cout << "~SignCreator"<< endl;
+   sig.clear();
 }
 
 void SignCreator::run(){

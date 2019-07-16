@@ -22,10 +22,12 @@
 const uint Director::process{4};
 
 Director::~Director(){
-    cout << "~Director"<< endl;
+    sigs.clear();
 }
 
-void Director::run(const string src,const string dst,const uint szBlock){
+void Director::start(const string src,const string dst,const uint szBlock){
+    this->dstPath = dst;
+    
     try{
         if (!szBlock) throw std::invalid_argument("size block 0 Mb");
 
@@ -39,8 +41,8 @@ void Director::run(const string src,const string dst,const uint szBlock){
         size_t countBlock = (sizeFile%szBlock) ? (sizeFile/szBlock) + 1 : (sizeFile/szBlock);
 
         /* 
-           Деление файла на process частей жадным алгоритмом
-           И создание объекта класса SignCreator для каждой части файла
+           Деление файла на $process частей жадным алгоритмом
+           И создание объекта SignCreator для каждой части файла
         */
 
         /* countBlock/proces блоков */
@@ -91,6 +93,11 @@ void Director::run(const string src,const string dst,const uint szBlock){
         return;
     }
 
+    run();
+    save();
+}
+
+void Director::run(){
     cout << "Running ...\nPlease Wait" << endl;
 
     /* Деление файла на потоки, каждый поток считает свой кусок файла */
@@ -122,16 +129,17 @@ void Director::run(const string src,const string dst,const uint szBlock){
             }            
         }
     }
+}
 
-    /* Сохраниение sig */
+/* Сохраниение sig */
+void Director::save(){
     try{
-        std::ofstream dstFile(dst);
+        std::ofstream dstFile(dstPath);
         std::ostream_iterator<uint32> out_it (dstFile);     
-
         for (auto &it: sigs)
             std::copy(it->getResult().begin(),it->getResult().end(),out_it );          
     }catch(exception &e){
-        std::cout << e.what() << '\n';
+        std::cout << e.what() << std::endl;
         return;
     }  
 }

@@ -46,13 +46,17 @@ public:
     Director& operator=(Director&&) = delete;
     Director& operator=(Director&) = delete;
 
-    void run(const string src,const string dst, const uint szBlock= 1048576);
-
+    void start(const string src,const string dst, const uint szBlock= 1048576);
+    
 private:
     static const uint process;
+    string dstPath;
 
     std::shared_ptr<file_mapping> map_file;
     std::vector<std::shared_ptr<SignCreator>> sigs;
+
+    void run();
+    void save();
 };
 
 
