@@ -85,6 +85,10 @@ template <class T>
          0xB40BBE37L, 0xC30C8EA1L, 0x5A05DF1BL, 0x2D02EF8DL
    };
 
+/* -----   Crc32Hash::calc()   ------------------------------------------------- */
+///   \param pData Указатель на массив char
+///   \param uSize Количество элементов
+///   @return Crc32 данной области памяти
 template <class T>
 T Crc32Hash<T>::calc(const unsigned char *pData,const size_t uSize) const{
     uint32 pCrc32 = 0xFFFFFFFF;
@@ -92,7 +96,6 @@ T Crc32Hash<T>::calc(const unsigned char *pData,const size_t uSize) const{
         pCrc32 = ((pCrc32) >> 8) ^ Crc32Tab[(pData[i]) ^ ((pCrc32) & 0x000000FF)];
     return ~pCrc32;
 }
-
 
 
 template class Crc32Hash<uint32>;

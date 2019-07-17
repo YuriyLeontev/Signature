@@ -3,4 +3,4 @@
 make -j $(nproc --all)
 
 # src dst size (Mb)
-./Signature ./test.bin ./test.sig 50
+time ./Signature sevastopol-6.1-20.06.2018.iso ./out.sig 100

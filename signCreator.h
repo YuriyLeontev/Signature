@@ -31,8 +31,16 @@ using namespace boost::interprocess;
 
 typedef __UINT32_TYPE__  uint32;   
 
+
+/**
+ \class SignCreator
+ \brief Класс расчёта sig региона файла
+ \author Y. A. Leontev
+ \date 2019.07.15
+*/
 class SignCreator {
 public:
+   /* Конструктор класса */
    SignCreator(std::shared_ptr<mapped_region> _region, const uint szBlock);
    ~SignCreator();
 
@@ -42,18 +50,18 @@ public:
    SignCreator& operator=(SignCreator&&) = delete;
    SignCreator& operator=(SignCreator&) = delete;
 
-   void run();
-   std::vector<uint32> & getResult();
+   void run(); /* Метод высисления sig */
 
-   std::exception_ptr & getError();
+   std::vector<uint32> & getResult(); /* Возвращает ссылку на вектор поситанных sig */
+   std::exception_ptr & getError(); /* Возвращает ссылку на exception_ptr */
 
 private:
-   std::shared_ptr<mapped_region> region;
-   const size_t sizeBlock;
-   std::unique_ptr<CheckSum<uint32>> checkSum;   
-   std::vector<uint32> sig;
+   std::shared_ptr<mapped_region> region; /* Регион файла */
+   const size_t sizeBlock; /* размер блока */
+   std::unique_ptr<CheckSum<uint32>> checkSum;   /* Экземпляр класса для подсчёта sig */
+   std::vector<uint32> sig; /* Результирующий вектор, содержащий sig */
     
-   std::exception_ptr eptr;
+   std::exception_ptr eptr; /* переменная для сохранения ошибки и передачи в основной поток */
 };
 
 

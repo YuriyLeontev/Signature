@@ -35,28 +35,35 @@ namespace fs = std::experimental::filesystem;
 using namespace boost::interprocess;
 using namespace std;
 
+/**
+ \class Director
+ \brief Основной класс-распорядитель
+ \author Y. A. Leontev
+ \date 2019.07.15
+*/
 class Director {
 public:
-    Director() = default;
-    ~Director();
+   Director() = default;
+   ~Director();
 
-    Director(const Director&) = delete;
-    Director(const Director&&) = delete;
+   Director(const Director&) = delete;
+   Director(const Director&&) = delete;
 
-    Director& operator=(Director&&) = delete;
-    Director& operator=(Director&) = delete;
+   Director& operator=(Director&&) = delete;
+   Director& operator=(Director&) = delete;
 
-    void start(const string src,const string dst, const uint szBlock= 1048576);
-    
+   /* Основной метод, выполняющий подготовку к вычислению sig */
+   void start(const string src,const string dst, const uint szBlock= 1048576);
+
 private:
-    static const uint process;
-    string dstPath;
+   static const uint process; /* Количество процессов */
+   string dstPath; /* Путь к выходному файлу */
 
-    std::shared_ptr<file_mapping> map_file;
-    std::vector<std::shared_ptr<SignCreator>> sigs;
+   std::shared_ptr<file_mapping> map_file; /* Указатель на FileMapping */
+   std::vector<std::shared_ptr<SignCreator>> sigs; /* Вектор экземпляров класса расчёта Sig */
 
-    void run();
-    void save();
+   void run();  /* Метод расчёта Sig */
+   void save(); /* Метод для сохранения резульата в выходной файл */
 };
 
 

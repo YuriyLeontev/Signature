@@ -18,20 +18,29 @@
 #include "signCreator.h"
 #include "crc32Hash.h"
 
-#include "pcout.h"
+//#include "pcout.h"
 
+
+/* -----   SignCreator::SignCreator()   ------------------------------------------------- */
+///   Конструктор класса
+///   \param _region Регион файла
+///   \param szBlock Размер блока
 SignCreator::SignCreator(std::shared_ptr<mapped_region> _region,uint szBlock):
 region(_region), 
 sizeBlock(szBlock),
-checkSum(make_unique<Crc32Hash<uint32>>()),
+checkSum(std::make_unique<Crc32Hash<uint32>>()),
 eptr(nullptr){
    
 }
 
+/* -----   SignCreator::~SignCreator()   ------------------------------------------------- */
+///   Деструктор класса
 SignCreator::~SignCreator(){
    sig.clear();
 }
 
+/* -----   SignCreator::run()   ------------------------------------------------- */
+///   Метод высисления sig
 void SignCreator::run(){
    try{
       sig.clear();
@@ -56,10 +65,16 @@ void SignCreator::run(){
    }
 }
 
-vector<uint32> & SignCreator::getResult(){
+/* -----   SignCreator::getResult()   ------------------------------------------------- */
+///   Метод возвращающий ссылку на вектор поситанных sig
+///   @return ссылка на вектор с результатами вычислений
+std::vector<uint32> & SignCreator::getResult(){
    return sig;
 }
 
+/* -----   SignCreator::getError()   ------------------------------------------------- */
+///   Метод возвращающий ссылку на exception_ptr
+///   @return ссылка на exception_ptr
 std::exception_ptr & SignCreator::getError(){
    return eptr;
 }

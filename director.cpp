@@ -19,12 +19,21 @@
 #include "crc32Hash.h"
 
 /* Количество потоков */
-const uint Director::process{4};
+const uint Director::process{1};
 
+
+/* -----   Director::~Director()     ------------------------------------------- */
+///   Деструктор класса.
 Director::~Director(){
     sigs.clear();
 }
 
+
+/* -----   Director::start()   ------------------------------------------------- */
+///   Основной метод, выполняющий подготовку к вычислению sig
+///   \param src Путь к исходному файлу
+///   \param dst Путь к выходному файлу
+///   \param szBlock Размер блока
 void Director::start(const string src,const string dst,const uint szBlock){
     this->dstPath = dst;
     
@@ -39,7 +48,7 @@ void Director::start(const string src,const string dst,const uint szBlock){
 
         /* Количество блоков */
         size_t countBlock = (sizeFile%szBlock) ? (sizeFile/szBlock) + 1 : (sizeFile/szBlock);
-
+            
         /* 
            Деление файла на $process частей жадным алгоритмом
            И создание объекта SignCreator для каждой части файла
@@ -51,6 +60,7 @@ void Director::start(const string src,const string dst,const uint szBlock){
         int count2 = countBlock%process;
 
         if (countBlock < process){
+            /* Тогда в одном потоке */
             count1 = count2 = 0;
             sigs.emplace_back(make_shared<SignCreator>(
                 make_shared<mapped_region>(*(map_file.get()),read_only),
@@ -62,9 +72,8 @@ void Director::start(const string src,const string dst,const uint szBlock){
 
         while(count2--){
             sigs.emplace_back(make_shared<SignCreator>(
-            make_shared<mapped_region>(*(map_file.get()),read_only,
-            offset, (countBlock/process + 1)*szBlock ), 
-            szBlock));
+                make_shared<mapped_region>(*(map_file.get()),read_only, offset, (countBlock/process + 1)*szBlock ), 
+                szBlock));
             offset += (countBlock/process + 1)*szBlock;
         }
 
@@ -97,6 +106,9 @@ void Director::start(const string src,const string dst,const uint szBlock){
     save();
 }
 
+
+/* -----   Director::run()   ------------------------------------------------- */
+///   Метод для создания потоков и расчёта sig
 void Director::run(){
     cout << "Running ...\nPlease Wait" << endl;
 
@@ -131,18 +143,20 @@ void Director::run(){
     }
 }
 
-/* Сохраниение sig */
+/* -----   Director::save()   ------------------------------------------------- */
+///   Метод для записи sig в выходной файл
 void Director::save(){
     try{
-        std::ofstream dstFile(dstPath);
+        std::ofstream dstFile(dstPath,ios::binary);
         dstFile.exceptions(ios::failbit|ios::badbit);
 
         std::ostream_iterator<uint32> out_it (dstFile);     
-        for (auto &it: sigs)
+        for (auto &it: sigs){
             std::copy(it->getResult().begin(),it->getResult().end(),out_it );          
+        }
         cout <<"Success" << endl;
     }catch(exception &e){
-        std::cout << e.what() << std::endl;
+        std::cout << "ERROR WRITE FILE\n " << e.what() << std::endl;
         return;
     }  
 }
