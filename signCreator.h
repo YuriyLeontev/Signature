@@ -22,7 +22,6 @@
 #include <vector>
 #include <stdexcept>
 
-#include <boost/iostreams/device/mapped_file.hpp>
 #include <boost/interprocess/mapped_region.hpp>
 
 #include "checkSum.h"

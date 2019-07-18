@@ -95,7 +95,7 @@ void Director::start(const string src,const string dst,const uint szBlock){
         }
     }catch(fs::filesystem_error& e) {
         std::cout << e.what() << '\n';
-        return;
+        return;        
     }catch(interprocess_exception& e){
         std::cout << e.what() << '\n';
         return;
@@ -103,16 +103,14 @@ void Director::start(const string src,const string dst,const uint szBlock){
         std::cout << "error: " << e.what() << endl;
         return;
     }
-
     run();
-    save();
 }
 
 
 /* -----   Director::run()   ------------------------------------------------- */
 ///   Метод для создания потоков и расчёта sig
 void Director::run(){
-    cout << "Running ...\nPlease Wait" << endl;
+    cout<< "Calculate signature " << map_file.get()->get_name() << "\nPlease Wait" <<endl;
 
     /* Деление файла на потоки, каждый поток считает свой кусок файла */
     try{
@@ -143,6 +141,7 @@ void Director::run(){
             }            
         }
     }
+    save();
 }
 
 /* -----   Director::save()   ------------------------------------------------- */
@@ -152,11 +151,11 @@ void Director::save(){
         std::ofstream dstFile(dstPath,ios::binary);
         dstFile.exceptions(ios::failbit|ios::badbit);
 
-        std::ostream_iterator<uint32> out_it (dstFile);     
+        std::ostream_iterator<uint32> out_it(dstFile);     
         for (auto &it: sigs){
             std::copy(it->getResult().begin(),it->getResult().end(),out_it );          
         }
-        cout <<"Success" << endl;
+        cout <<"Success\nFile sig: " << dstPath << endl;
     }catch(exception &e){
         std::cout << "ERROR WRITE FILE\n " << e.what() << std::endl;
         return;

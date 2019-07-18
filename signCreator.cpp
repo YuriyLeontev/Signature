@@ -42,12 +42,13 @@ SignCreator::~SignCreator(){
 /* -----   SignCreator::run()   ------------------------------------------------- */
 ///   Метод высисления sig
 void SignCreator::run(){
-   try{
-      sig.clear();
-      std::size_t size  = region.get()->get_size(); 
-      size_t countBlock = size / sizeBlock;    
+   sig.clear();
+   std::size_t size  = region.get()->get_size(); 
+   const unsigned char *mem = static_cast<unsigned char*>(region.get()->get_address());
 
-      const unsigned char *mem = static_cast<unsigned char*>(region.get()->get_address());
+   try{
+      if (!sizeBlock) throw std::invalid_argument("size block 0 Mb");
+      size_t countBlock = size / sizeBlock;    
       
       if (!countBlock){
          sig.emplace_back(checkSum.get()->calc(mem, size%sizeBlock));       

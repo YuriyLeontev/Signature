@@ -16,7 +16,6 @@ int main (int argc, char *argv[]){
   else if (argc == 3)
     director.start(argv[1], argv[2]);
   else
-    return -1;
-
+    std::cout << "invalid parameters\nparam1 = path to src file\nparam2 = path to dst file\nparam3 = size block (Mb) default = 1 Mb" << std::endl;
 return 0;
 }

@@ -20,6 +20,8 @@
 
 #include <iostream>
 #include <fstream> 
+#include <functional>
+#include <iterator>
 #include <string>
 #include <memory>
 #include <thread>
