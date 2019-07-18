@@ -58,7 +58,7 @@ void SignCreator::run(){
             mem+=sizeBlock;
          }
          if (size%sizeBlock)
-            sig.emplace_back(checkSum.get()->calc(mem, size%sizeBlock));       
+            sig.emplace_back(checkSum.get()->calc(mem, size%sizeBlock));
       }
    }catch(...){
       eptr = std::current_exception();

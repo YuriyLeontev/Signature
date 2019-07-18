@@ -7,8 +7,8 @@ int main (int argc, char *argv[]){
   Director director;
 
   if (argc == 4){
-    uint size = atoi(argv[3]);
-    if (size && size != __UINT16_MAX__)
+    int size = atoi(argv[3]);
+    if (size && size != __INT_MAX__)
       director.start(argv[1], argv[2],size * MB);
     else
       director.start(argv[1], argv[2]);

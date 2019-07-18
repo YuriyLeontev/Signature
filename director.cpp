@@ -18,8 +18,10 @@
 #include "director.h"
 #include "crc32Hash.h"
 
-/* Количество потоков */
-const uint Director::process{1};
+/* Количество потоков 
+   P.S Есть смысл параллелить если SSD
+*/
+const uint Director::process{4};
 
 
 /* -----   Director::~Director()     ------------------------------------------- */
