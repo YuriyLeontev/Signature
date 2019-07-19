@@ -1,5 +1,5 @@
 CC=g++-7
-compile_flags := -c -std=c++17 -Wall
+compile_flags := -c -std=c++17 -Wall -pipe
 LDFLAGS := -lstdc++fs -pthread
 CXXFLAGS += -MMD
 

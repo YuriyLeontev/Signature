@@ -18,6 +18,7 @@
 #include "signCreator.h"
 #include "crc32Hash.h"
 
+//#include <boost/crc.hpp>
 //#include "pcout.h"
 
 
@@ -48,8 +49,10 @@ void SignCreator::run(){
 
    try{
       if (!sizeBlock) throw std::invalid_argument("size block 0 Mb");
-      size_t countBlock = size / sizeBlock;    
-      
+      size_t countBlock = size / sizeBlock; 
+
+      sig.reserve(countBlock); /* Заранее зарезирвируем память */
+
       if (!countBlock){
          sig.emplace_back(checkSum.get()->calc(mem, size%sizeBlock));       
       }
@@ -67,15 +70,15 @@ void SignCreator::run(){
 }
 
 /* -----   SignCreator::getResult()   ------------------------------------------------- */
-///   Метод возвращающий ссылку на вектор поситанных sig
+///   Метод возвращающий константную ссылку на вектор поситанных sig
 ///   @return ссылка на вектор с результатами вычислений
-std::vector<uint32> & SignCreator::getResult(){
+const std::vector<uint32> & SignCreator::getResult() const{
    return sig;
 }
 
 /* -----   SignCreator::getError()   ------------------------------------------------- */
-///   Метод возвращающий ссылку на exception_ptr
+///   Метод возвращающий константную ссылку на exception_ptr
 ///   @return ссылка на exception_ptr
-std::exception_ptr & SignCreator::getError(){
+const std::exception_ptr & SignCreator::getError() const{
    return eptr;
 }

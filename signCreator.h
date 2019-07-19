@@ -51,8 +51,8 @@ public:
 
    void run(); /* Метод высисления sig */
 
-   std::vector<uint32> & getResult(); /* Возвращает ссылку на вектор поситанных sig */
-   std::exception_ptr & getError(); /* Возвращает ссылку на exception_ptr */
+   const std::vector<uint32> & getResult() const; /* Возвращает ссылку на вектор поситанных sig */
+   const std::exception_ptr & getError() const; /* Возвращает ссылку на exception_ptr */
 
 private:
    std::shared_ptr<mapped_region> region; /* Регион файла */

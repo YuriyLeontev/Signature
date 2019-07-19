@@ -62,7 +62,7 @@ void Director::start(const string src,const string dst,const uint szBlock){
         int count2 = countBlock%process;
 
         if (countBlock < process){
-            /* Тогда в одном потоке */
+            /* Тогда файл целиком 1 потоком */
             count1 = count2 = 0;
             sigs.emplace_back(make_shared<SignCreator>(
                 make_shared<mapped_region>(*(map_file.get()),read_only),
